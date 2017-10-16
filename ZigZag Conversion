@@ -1,0 +1,26 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows <= 1) {
+            return s;
+        }
+        int len = s.length();
+        int n = numRows - 1;
+        String ret = "";
+        for (int i = 0; i <= n; i++) {
+            int start = i;
+            while (start < len) {
+                ret += s.charAt(start);
+                if (i == 0 || i == n) {
+                    start += n * 2;
+                    continue;
+                }
+                start += (n - i) * 2;
+                if (start < len) {
+                    ret += s.charAt(start);
+                }
+                start += i * 2;
+            }
+        }
+        return ret;
+    }
+}
