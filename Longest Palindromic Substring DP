@@ -1,0 +1,45 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null) {
+            return "";
+        }
+        int max_len = 0;
+        int max_left = 0;
+        int max_right = 0;
+        int len = s.length();
+        boolean[][] p = new boolean[len][len];
+        for (int i = 0; i < len; i++) {
+            p[i][i] = true;
+            max_len = 1;
+            max_left = i;
+            max_right = i + 1;
+        }
+        for (int i = 0; i < len - 1; i++) {
+            p[i][i+1] = (s.charAt(i) == s.charAt(i+1));
+            if (p[i][i+1]) {
+                max_len = 2;
+                max_left = i;
+                max_right = i + 2;
+            }
+        }
+        
+        
+        for (int l = 3; l <= len; l++) {
+            for (int i = 0; i < len - l + 1; i++) {
+                int j = i + l - 1;
+                if (s.charAt(i) == s.charAt(j)) {
+                    p[i][j] = p[i+1][j-1];
+                    if (p[i][j] && l > max_len) {
+                        max_left = i;
+                        max_right = j + 1;
+                        max_len = l;
+                    }
+                } else {
+                    p[i][j] = false;
+                }
+                
+            }
+        }
+        return s.substring(max_left, max_right);
+    }
+}
