@@ -1,0 +1,63 @@
+class Solution {
+    public int myAtoi(String str) {
+        int len = str.length();
+        if (len == 0) {
+            return 0;
+        }
+        int i = 0;
+        int ret = 0;
+        int pos_margin = Integer.MAX_VALUE -  Integer.MAX_VALUE / 10 * 10;
+        int neg_margin = Integer.MIN_VALUE / 10 * 10 - Integer.MIN_VALUE;
+        boolean started = false;
+        boolean positive = true;
+        while (i < len) {
+            char c = str.charAt(i);
+            if (started) {
+                if (c >= '0' && c <= '9') {
+                    int d = c - '0';
+                    if (ret == Integer.MAX_VALUE / 10) {
+                        if (positive) {
+                            if (d > pos_margin) {
+                                return Integer.MAX_VALUE;
+                            }
+                        } else {
+                            if (d > neg_margin) {
+                                return Integer.MIN_VALUE;
+                            }
+                        }
+                    } else if (ret > Integer.MAX_VALUE / 10) {
+                        if (positive) {
+                            return Integer.MAX_VALUE;
+                        } else {
+                            return Integer.MIN_VALUE;
+                        }
+                    }
+                    ret *= 10;
+                    ret += d;
+                } else {
+                    break;
+                }
+            } else {
+                if (c == '+') {
+                    started = true;
+                } else if (c == '-') {
+                    positive = false;
+                    started = true;
+                } else if (c >= '0' && c <= '9') {
+                    int d = c - '0';
+                    started = true;
+                    ret = d;
+                } else if (c != ' '){
+                    // invalid case
+                    return 0;
+                }
+            }
+            i++;
+        }
+        if (positive) {
+            return ret;
+        } else {
+            return -ret;
+        }
+    }
+}
