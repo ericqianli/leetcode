@@ -1,0 +1,27 @@
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        
+        if (nums.length == 0) {
+            return ret;
+        }
+        
+        Set<Integer> set = new HashSet<Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                int target = - (nums[i] + nums[j]);
+                if (set.contains(target)) {
+                    List<Integer> temp = new ArrayList<Integer>();
+                    temp.add(nums[i]);
+                    temp.add(nums[j]);
+                    temp.add(target);
+                    Collections.sort(temp);
+                    if (!ret.contains(temp)) {
+                        ret.add(temp);
+                    }
+                }
+            }
+            set.add(nums[i]);
+        }
+        return ret;
+    }
+}
