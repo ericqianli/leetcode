@@ -1,0 +1,30 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        // scan from right to left, until we find the first decreasing number
+        int len = nums.length;
+        int i = len - 1;
+        while (i >= 1 && nums[i-1] >= nums[i]) {
+            i--;
+        }
+        // exchange i with the least larger element on its right
+        if (i > 0) {
+            int j = i;
+            while (j < len && nums[j] > nums[i-1]) {
+                j++;
+            }
+            // swap i with j-1
+            int temp = nums[i-1];
+            nums[i-1] = nums[j-1];
+            nums[j-1] = temp;
+        }
+        // reserve order from i to the end
+        for (int j = i, k = len - 1; j < k; j++, k--) {
+            int temp  = nums[j];
+            nums[j] = nums[k];
+            nums[k] = temp;
+        }
+    }
+}
