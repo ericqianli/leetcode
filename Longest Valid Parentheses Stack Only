@@ -1,0 +1,36 @@
+class Solution {
+    public int longestValidParentheses(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        int len = s.length();
+        Stack<Integer> stack = new Stack<Integer>();
+        int root = 0;
+        int max = 0;
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                stack.push(0);
+            } else if (c == ')') {
+                if (!stack.empty()) {
+                    int child = stack.pop();
+                    int parent;
+                    if (!stack.empty()) {
+                        parent = stack.pop();
+                        parent += child + 2;
+                        stack.push(parent);
+                    } else { // hit root
+                        root += child + 2;
+                        parent = root;
+                    }
+                    if (parent > max) {
+                        max = parent;
+                    }
+                } else {
+                    root = 0;
+                }
+            }
+        }
+        return max;
+    }
+}
