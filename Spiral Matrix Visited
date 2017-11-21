@@ -1,0 +1,77 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> ret = new ArrayList<Integer>();
+        int m = matrix.length;
+        if (m == 0) {
+            return ret;
+        }
+        int n = matrix[0].length;
+        if (n == 0) {
+            return ret;
+        }
+        // init visited matrix
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                visited[i][j] = false;
+            }
+        }
+        // looping
+        int direction = 0; // 0: right, 1: down, 2: left, 3: up
+        int i = 0;
+        int j = 0;
+        ret.add(matrix[0][0]);
+        visited[0][0] = true;
+        while (true) {
+            if ((j + 1 >= n || visited[i][j+1])
+                && (i + 1 >= m || visited[i+1][j])
+                && (j - 1 < 0 || visited[i][j-1])
+                && (i - 1 < 0 || visited[i-1][j])
+            ) {
+                break;
+            }
+            switch (direction) {
+                case 0: // j + 1
+                    if (j + 1 < n && !visited[i][j+1]) {
+                        j++;
+                        ret.add(matrix[i][j]);
+                        visited[i][j] = true;
+                    } else {
+                        direction = 1;
+                    }
+                    break;
+                case 1: // i + 1
+                    if (i + 1 < m && !visited[i+1][j]) {
+                        i++;
+                        ret.add(matrix[i][j]);
+                        visited[i][j] = true;
+                    } else {
+                        direction = 2;
+                    }
+                    break;
+                case 2: // j - 1
+                    if (j - 1 >= 0 && !visited[i][j-1]) {
+                        j--;
+                        ret.add(matrix[i][j]);
+                        visited[i][j] = true;
+                    } else {
+                        direction = 3;
+                    }
+                    break;
+                case 3: // i - 1
+                    if (i - 1 >= 0 && !visited[i-1][j]) {
+                        i--;
+                        ret.add(matrix[i][j]);
+                        visited[i][j] = true;
+                    } else {
+                        direction = 0;
+                    }
+                    break;
+                default:
+                    // handle exception
+                    break;
+            }
+        }
+        return ret;
+    }
+}
