@@ -1,0 +1,27 @@
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str: strs) {
+            String signature = this.sortString(str);
+            if (!map.containsKey(signature)) {
+                map.put(signature, new ArrayList<String>());
+            }
+            map.get(signature).add(str);
+        }
+        List<List<String>> list = new ArrayList<List<String>>(map.values());
+        return list;
+    }
+    
+    // Method to sort a string alphabetically
+    private static String sortString(String inputString)
+    {
+        // convert input string to char array
+        char tempArray[] = inputString.toCharArray();
+         
+        // sort tempArray
+        Arrays.sort(tempArray);
+         
+        // return new sorted string
+        return new String(tempArray);
+    }
+}
