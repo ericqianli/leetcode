@@ -1,0 +1,20 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        int len = nums.length;
+        boolean[] reach = new boolean[len];
+        reach[0] = true;
+        for (int i = 0; i < len - 1; i++) {
+            if (!reach[i]) {
+                continue;
+            }
+            int step = nums[i];
+            for (int j = 1; j <= step && i + j < len; j++) {
+                reach[i + j] = true;
+            }
+        }
+        return reach[len-1];
+    }
+}
