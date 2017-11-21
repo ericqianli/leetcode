@@ -1,0 +1,15 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums == null) {
+            return false;
+        }
+        int len = nums.length;
+        int reach = len - 1; // earliest reachable index
+        for (int i = len - 2; i >= 0; i--) {
+            if (i + nums[i] >= reach) {
+                reach = i;
+            }
+        }
+        return (reach == 0);
+    }
+}
