@@ -1,0 +1,36 @@
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null) {
+            return 0;
+        }
+        int len = heights.length;
+        if (len == 0) {
+            return 0;
+        }
+        int max_area = 0;
+        
+        // The element below is the index of the first bar that is smaller than the current bar height to its left
+        Stack<Integer> stack = new Stack<Integer>();
+        stack.push(-1);
+        
+        for (int i = 0; i < len; i++) {
+            int left = stack.peek();
+            while (left != -1 && heights[left] > heights[i]) {
+                int top = stack.pop();
+                left = stack.peek();
+                int area = heights[top] * (i - left - 1);
+                max_area = Math.max(max_area, area);
+            }
+            stack.push(i);
+        }
+        
+        while (stack.peek() != -1) {
+            int top = stack.pop();
+            int left = stack.peek();
+            int area = heights[top] * (len - left - 1);
+            max_area = Math.max(max_area, area);
+        }  
+        
+        return max_area;
+    }
+}
