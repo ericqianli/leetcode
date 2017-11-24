@@ -1,0 +1,33 @@
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if (grid == null) {
+            return 0;
+        }
+        int m = grid.length;
+        if (m == 0) {
+            return 0;
+        }
+        int n = grid[0].length;
+        if (n == 0) {
+            return 0;
+        }
+        int[][] ret = new int[m][n];
+        int sum = 0;
+        for (int i = 0; i < m; i++) {
+            sum += grid[i][0];
+            ret[i][0] = sum;
+        }
+        sum = 0;
+        for (int j = 0; j < n; j++) {
+            sum += grid[0][j];
+            ret[0][j] = sum;
+        }
+        // propagation
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                ret[i][j] = grid[i][j] + Math.min(ret[i-1][j], ret[i][j-1]);
+            }
+        }
+        return ret[m-1][n-1];
+    }
+}
