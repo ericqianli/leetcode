@@ -1,0 +1,45 @@
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null) {
+            return 0;
+        }
+        int m = matrix.length;
+        if (m == 0) {
+            return 0;
+        }
+        int n = matrix[0].length;
+        if (n == 0) {
+            return 0;
+        }
+        
+        int max_area = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '0') {
+                    continue;
+                }
+                // compute the number of continuous 1's on each row
+                int i_max = i;
+                while (i_max < m && matrix[i_max][j] == '1') {
+                    i_max++;
+                }
+                //List<Integer> width = new ArrayList<Integer>();
+                int max_width = n;
+                for (int ii = i; ii < i_max; ii++) {
+                    int j_max = j;
+                    while (j_max < n && matrix[ii][j_max] == '1') {
+                        j_max++;
+                    }
+                    int cur_width = j_max - j;
+                    if (cur_width == 0) {
+                        break;
+                    }
+                    max_width = Math.min(max_width, cur_width);
+                    int area = (ii - i + 1) * max_width;
+                    max_area = Math.max(max_area, area);
+                }
+            }
+        }
+        return max_area;
+    }
+}
