@@ -14,6 +14,7 @@ class Solution {
         
         int max_area = 0;
         int[] height = new int[n+1]; // leave a 0 at tail for stack purpose
+        int[] stack = new int[n+2]; // head for -1, tail for n.
         
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -23,8 +24,6 @@ class Solution {
                     height[j] = 0;
                 }
             }
-           
-            int[] stack = new int[n+2]; // head for -1, tail for n.
             int top = 0;
             stack[top] = -1;
             for (int j = 0; j <= n; j++) { // note we have to include n to clear stack
