@@ -1,0 +1,65 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null) {
+            return 0;
+        }
+        int[] s1 = maxProfitOneTransaction(prices, 0, prices.length);
+        if (s1[0] == -1 || s1[1] == -1) {
+            return 0;
+        }
+        int b = s1[0];
+        int s = s1[1];
+        if (b == -1 || s == -1) {
+            return 0;
+        }
+        int gain_middle = prices[s] - prices[b];
+        
+        int[] s_2 = maxProfitOneTransaction(prices, 0, b);
+        int[] s_3 = maxProfitOneTransaction(prices, s+1, prices.length);
+        int gain_left = 0;
+        if (s_2[0] != -1 && s_2[1] != -1) {
+            gain_left = prices[s_2[1]] - prices[s_2[0]];
+        }
+        int gain_right = 0;
+        if (s_3[0] != -1 && s_3[1] != -1) {
+            gain_right = prices[s_3[1]] - prices[s_3[0]];
+        }
+        int gain_side = Math.max(gain_left, gain_right);
+        
+        int max_drop = 0;
+        int counter = 0;
+        for (int i = b; i < s; i++) {
+            if (prices[i+1] >= prices[i]) {
+                counter = 0;
+            } else {
+                counter += (prices[i] - prices[i+1]);
+                max_drop = Math.max(max_drop, counter);
+            }
+        }
+        
+        return gain_middle + Math.max(gain_side, max_drop);    
+    }
+    
+    public int[] maxProfitOneTransaction(int[] prices, int start, int end) { // start inclusive end exclusive
+        if (prices == null || prices.length == 0 || start >= end || start < 0 || end <= 0 || start >= prices.length || end > prices.length) {
+            return new int[] {-1, -1};
+        }
+        int b = start;
+        int s = start;
+        int low_i = start;
+        int max = 0;
+        for (int i = start + 1; i < end; i++) {
+            if (prices[i] < prices[low_i]) {
+                low_i = i;
+            } else {
+                int gain = prices[i] - prices[low_i];
+                if (gain > max) {
+                    max = gain;
+                    b = low_i;
+                    s = i;
+                }
+            }
+        }
+        return new int[] {b, s};
+    }
+}
