@@ -1,0 +1,64 @@
+class Solution {
+
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        Map<Integer, Interval> startMap = new HashMap<Integer, Interval>();
+        Map<Integer, Interval> endMap = new HashMap<Integer, Interval>();
+        Set<Integer> visited = new HashSet<Integer>();
+        
+        int max = 0;
+        for (int i = 0; i < len; i++) {
+            int num = nums[i];
+            if (visited.contains(num)) {
+                continue;
+            }
+            visited.add(num);
+            
+            Interval prev = endMap.get(num-1);
+            Interval next = startMap.get(num+1);
+            if (prev == null) {
+                if (next == null) {
+                    // create new interval
+                    Interval interval = new Interval(num, num);
+                    startMap.put(num, interval);
+                    endMap.put(num, interval);
+                    max = Math.max(max, 1);
+                } else {
+                    // prev == null, next != null, merge into next
+                    startMap.remove(num+1);
+                    next.start = num;
+                    startMap.put(num, next);
+                    max = Math.max(max, next.end - next.start + 1);
+                }
+            } else { // prev not null
+                if (next == null) {
+                    // prev != null, next == null, merge with prev
+                    endMap.remove(num-1);
+                    prev.end = num;
+                    endMap.put(num, prev);
+                    max = Math.max(max, prev.end - prev.start + 1);
+                } else {
+                    // prev and next both non-null, merge prev and next
+                    endMap.remove(num-1);
+                    startMap.remove(num+1);
+                    Interval interval = new Interval(prev.start, next.end);
+                    startMap.put(prev.start, interval);
+                    endMap.put(next.end, interval);
+                    max = Math.max(max, interval.end - interval.start + 1);
+                }
+            }
+        }
+        
+        return max;
+    }
+    
+    class Interval {
+        int start;
+        int end;
+        Interval() { start = 0; end = 0; }
+        Interval(int s, int e) { start = s; end = e; }
+    }
+}
