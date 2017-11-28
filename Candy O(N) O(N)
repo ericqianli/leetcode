@@ -16,19 +16,13 @@ class Solution {
                 candy[i] = 1;
             }
         }
+        int sum = candy[len - 1];
         for (int i = len - 1; i > 0; i--) {
             if (ratings[i - 1] > ratings[i]) {
-                if (i == 1 || ratings[i - 2] >= ratings[i - 1]) {
-                    candy[i - 1] = candy[i] + 1;
-                } else {
-                    candy[i - 1] = Math.max(candy[i-2], candy[i]) + 1;
-                }  
+                candy[i - 1] = Math.max(candy[i-1], candy[i] + 1);
             }
+            sum += candy[i - 1];
         }
-        int count = 0;
-        for (int i = 0; i < len; i++) {
-            count += candy[i];
-        }
-        return count;
+        return sum;
     }
 }
