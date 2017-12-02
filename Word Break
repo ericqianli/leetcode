@@ -1,0 +1,26 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || wordDict == null) {
+            return false;
+        }
+        Queue<String> queue = new LinkedList<String>();
+        Set<String> visited = new HashSet<String>();
+        queue.add(s);
+        while (!queue.isEmpty()) {
+            String remain = queue.poll();
+            if (remain.isEmpty()) {
+                return true;
+            }
+            if (visited.contains(remain)) {
+                continue;
+            }
+            visited.add(remain);
+            for (String word: wordDict) {
+                if (remain.startsWith(word)) {
+                    queue.add(remain.substring(word.length()));
+                }
+            }
+        }
+        return false;
+    }
+}
