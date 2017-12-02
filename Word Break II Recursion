@@ -1,0 +1,22 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> ret = new ArrayList<String>();
+        if (s == null || wordDict == null) {
+            return ret;
+        }
+        if (s.isEmpty()) {
+            return ret;
+        }
+        for (String word: wordDict) {
+            if (s.equals(word)) {
+                ret.add(word);
+            } else if (s.startsWith(word)) {
+                List<String> list = wordBreak(s.substring(word.length()), wordDict);
+                for (String newWord: list) {
+                    ret.add(word + " " + newWord);
+                }
+            }
+        }
+        return ret;
+    }
+}
