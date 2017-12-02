@@ -1,0 +1,38 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> ret = new ArrayList<String>();
+        if (s == null || wordDict == null) {
+            return ret;
+        }
+        if (s.isEmpty()) {
+            return ret;
+        }
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        return workBreakHelper(s, wordDict, map);
+    }
+    
+    public List<String> workBreakHelper(String s, List<String> wordDict, Map<String, List<String>> map) {
+        List<String> ret = new ArrayList<String>();
+        if (s == null || wordDict == null) {
+            return ret;
+        }
+        if (s.isEmpty()) {
+            return ret;
+        }
+        if (map.containsKey(s)) {
+            return map.get(s);
+        }
+        for (String word: wordDict) {
+            if (s.equals(word)) {
+                ret.add(s);
+            } else if (s.startsWith(word)) {
+                List<String> list = workBreakHelper(s.substring(word.length()), wordDict, map);
+                for (String words: list) {
+                    ret.add(word + " " + words);
+                }
+            }
+        }
+        map.put(s, ret);
+        return ret;
+    }
+}
