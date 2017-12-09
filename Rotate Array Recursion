@@ -1,0 +1,43 @@
+class Solution {
+    public void rotate(int[] nums, int k) {
+        if (nums == null) {
+            return;
+        }
+        int len = nums.length;
+        if (len <= 1) {
+            return;
+        }
+        rotateHelper(nums, 0, len, k);
+    }
+    
+    public void rotateHelper(int[] nums, int s, int e, int k) { // s inclusive, e exclusive
+        int len = e - s;
+        if (len <= 1) {
+            return;
+        }
+        k = k % len;
+        if (k == 0) {
+            return;
+        }
+        if (k > len / 2) {
+            k -= len;
+        }
+        if (k < - (len / 2)) {
+            k += len;
+        }
+        int sign = k;
+        if (k < 0) {
+            k = -k;
+        }
+        for (int i = s; i < s + k; i++) {
+            int temp = nums[i];
+            nums[i] = nums[i + len - k];
+            nums[i + len - k] = temp;
+        }
+        if (sign > 0) {
+            rotateHelper(nums, s + k, e, k);
+        } else {
+            rotateHelper(nums, s, e - k, -k);
+        }
+    }
+}
