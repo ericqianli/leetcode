@@ -11,10 +11,6 @@ class Trie {
         key = ' ';
     }
     
-    public Trie(char key) {
-        this.key = key;
-    }
-    
     /** Inserts a word into the trie. */
     public void insert(String word) {
         if (word.isEmpty()) {
