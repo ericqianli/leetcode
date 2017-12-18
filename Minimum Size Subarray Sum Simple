@@ -1,0 +1,23 @@
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int len = nums.length;
+        if (len == 0) {
+            return 0;
+        }
+        int b = 0;
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        for (int e = 0; e < len; e++) {
+            sum += nums[e];
+            while (sum >= s) {
+                min = Math.min(min, e - b + 1);
+                sum -= nums[b];
+                b++;
+            }
+        }
+        return min == Integer.MAX_VALUE ? 0 : min;
+    }
+}
