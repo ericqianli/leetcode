@@ -1,0 +1,57 @@
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        if (matrix == null) {
+            return 0;
+        }
+        int m = matrix.length;
+        if (m == 0) {
+            return 0;
+        }
+        int n = matrix[0].length;
+        if (n == 0) {
+            return 0;
+        }
+        
+        int max = 0;
+        int[] h = new int[n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    h[j] += 1;
+                } else {
+                    h[j] = 0;
+                }
+            }
+            int area = largestSquareArea(h);
+            max = Math.max(max, area);
+        }
+        
+        return max;
+    }
+    
+    public int largestSquareArea(int[] heights) {
+        int len = heights.length;
+        if (len == 0) {
+            return 0;
+        }
+        int[] stack = new int[len + 2];
+        int head = 0;
+        stack[0] = -1;
+        int max = 0;
+        
+        for (int i = 0; i <= len; i++) {
+            int left = stack[head];
+            int cur_height = (i < len) ? heights[i] : 0;
+            while (left != -1 && heights[left] > cur_height) {
+                int top = stack[head--];
+                left = stack[head];
+                int c = Math.min(heights[top], (i - left - 1));
+                int area = c * c;
+                max = Math.max(max, area);
+            }
+            stack[++head] = i;
+        }
+        
+        return max;
+    }
+}
