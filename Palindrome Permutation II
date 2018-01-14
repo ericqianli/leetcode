@@ -1,0 +1,77 @@
+class Solution {
+    public List<String> generatePalindromes(String s) {
+        List<String> ret = new ArrayList<String>();
+        if (s == null || s.length() == 0) {
+            return ret;
+        }
+        HashMap<Character, Integer> count = new HashMap<>();
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            if (count.containsKey(c)) {
+                count.put(c, count.get(c) + 1);
+            } else {
+                count.put(c, 1);
+            }
+        }
+        boolean odd_seen = false;
+        char odd = ' ';
+        for (char k: count.keySet()) {
+            if (count.get(k) % 2 == 1) {
+                if (!odd_seen) {
+                    odd_seen = true;
+                    odd = k;
+                } else {
+                    return ret;
+                }
+            }
+            count.put(k, new Integer(count.get(k) / 2));
+        }
+        if (odd_seen && count.get(odd) == 0) {
+            count.remove(odd);
+        }
+
+        HashSet<String> set = generatePalindromesHelper(count);
+        if (odd_seen && set.isEmpty()) {
+            ret.add(String.valueOf(odd));
+        } else {
+            for (String ss: set) {
+                String reverse = new StringBuffer(ss).reverse().toString();
+                if (odd_seen) {
+                    ret.add(ss + odd + reverse);
+                } else {
+                    ret.add(ss + reverse);
+                }
+            }
+        }
+        return ret;
+    }
+    
+    public HashSet<String> generatePalindromesHelper(HashMap<Character, Integer> count) {
+        if (count.isEmpty()) {
+            return new HashSet<String>();
+        }
+        HashSet<String> new_set = new HashSet<>();
+        for (Character c: count.keySet()) {
+            HashMap<Character, Integer> new_count = new HashMap<>(count);
+            int num = new_count.get(c);
+            if (num == 1) {
+                new_count.remove(c);
+            } else {
+                new_count.put(c, num - 1);
+            }
+            HashSet<String> set = generatePalindromesHelper(new_count);
+            if (set.isEmpty()) {
+                new_set.add(String.valueOf(c));
+            } else {
+                for (String s: set) {
+                    for (int i = 0; i < s.length(); i++) {
+                        String new_s = s.substring(0, i) + c + s.substring(i, s.length());
+                        new_set.add(new_s);
+                    }
+                }
+            }
+        }
+        return new_set;
+    }
+}
