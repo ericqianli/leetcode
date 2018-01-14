@@ -1,0 +1,13 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        int r = len * (len + 1) / 2;
+        for (int num: nums) {
+            r -= num;
+        }
+        return r;
+    }
+}
