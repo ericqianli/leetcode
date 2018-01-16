@@ -1,0 +1,41 @@
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if (rooms == null) {
+            return;
+        }
+        int m = rooms.length;
+        if (m == 0) {
+            return;
+        }
+        int n = rooms[0].length;
+        // get initial count of inf
+        boolean changed = false;
+        // start iteration
+        do {
+            changed = false;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    int num = rooms[i][j];
+                    if (num > 0) {
+                        // check its 4 neighbors
+                        if (i > 0 && rooms[i-1][j] != -1 && rooms[i-1][j] != Integer.MAX_VALUE) {
+                            rooms[i][j] = Math.min(num, rooms[i-1][j] + 1);
+                        }
+                        if (i < m - 1 && rooms[i+1][j] != -1 && rooms[i+1][j] != Integer.MAX_VALUE) {
+                            rooms[i][j] = Math.min(rooms[i][j], rooms[i+1][j] + 1);
+                        }
+                        if (j > 0 && rooms[i][j-1] != -1 && rooms[i][j-1] != Integer.MAX_VALUE) {
+                            rooms[i][j] = Math.min(rooms[i][j], rooms[i][j-1] + 1);
+                        }
+                        if (j < n - 1 && rooms[i][j+1] != -1 && rooms[i][j+1] != Integer.MAX_VALUE) {
+                            rooms[i][j] = Math.min(rooms[i][j], rooms[i][j+1] + 1);
+                        }
+                        if (rooms[i][j] != num) {
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        } while (changed);
+    }
+}
