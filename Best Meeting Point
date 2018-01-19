@@ -1,0 +1,55 @@
+class Solution {
+    public int minTotalDistance(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        int m = grid.length;
+        int n = grid[0].length;
+        if (n == 0) {
+            return 0;
+        }
+        
+        int k = 0;
+        int[] x = new int[m];
+        int[] y = new int[n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    x[i]++;
+                    y[j]++;
+                    k++;
+                }
+            }
+        }
+        
+        int sum = 0;
+        int m_x = 0;
+        for (int i = 0; i < m; i++) {
+            sum += x[i];
+            if (sum > k/2) {
+                m_x = i;
+                break;
+            }
+        }
+        
+        int m_y = 0;
+        sum = 0;
+        for (int j = 0; j < n; j++) {
+            sum += y[j];
+            if (sum > k/2) {
+                m_y = j;
+                break;
+            }
+        }
+        
+        int dist = 0;
+        // calc dist
+        for (int i = 0; i < m; i++) {
+            dist += x[i] * Math.abs(i - m_x);
+        }
+        for (int j = 0; j < n; j++) {
+            dist += y[j] * Math.abs(j - m_y);
+        }
+        return dist;
+    }
+}
