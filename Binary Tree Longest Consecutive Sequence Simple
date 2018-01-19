@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private int max = 0;
+    public int longestConsecutive(TreeNode root) {
+        dfs(root);
+        return max;
+    }
+
+    private int dfs(TreeNode r) {
+        if (r == null) {
+            return 0;
+        }
+        int left = dfs(r.left);
+        int right = dfs(r.right);
+        
+        if (r.left != null && r.val + 1 == r.left.val) {
+            left++;
+        } else {
+            left = 1;
+        }
+        if (r.right != null && r.val + 1 == r.right.val) {
+            right++;
+        } else {
+            right = 1;
+        }
+        
+        int len = Math.max(left, right);
+        
+        max = Math.max(max, len);
+        return len;
+    }
+}
