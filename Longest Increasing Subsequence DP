@@ -1,0 +1,20 @@
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int len = nums.length;
+        int[] max = new int[len + 1]; // max[i] = length of LIS ending at i
+        max[0] = 1;
+        for (int i = 1; i <= len; i++) {
+            int max_len = 1;
+            for (int j = 0; j < i; j++) {
+                if (i == len || nums[j] < nums[i]) {
+                    max_len = Math.max(max_len, max[j] + 1);
+                }
+            }
+            max[i] = max_len;
+        }
+        return max[len] - 1;
+    }
+}
