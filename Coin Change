@@ -1,0 +1,29 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        if (amount <= 0) {
+            return 0;
+        }
+        if (coins == null || coins.length == 0) {
+            return -1;
+        }
+        int len = coins.length;
+        int[] count = new int[amount + 1];
+        count[0] = 0;
+    
+        for (int i = 1; i <= amount; i++) {
+            int min = -1;
+            for (int v: coins) {
+                if (i - v >= 0 && count[i - v] != -1) {
+                    if (min == -1) {
+                        min = count[i - v] + 1;
+                    } else {
+                        min = Math.min(min, count[i - v] + 1);
+                    }
+                }
+            }
+            count[i] = min;
+        }
+        
+        return count[amount];
+    }
+}
