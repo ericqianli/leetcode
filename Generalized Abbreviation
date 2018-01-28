@@ -1,0 +1,47 @@
+class Solution {
+    Map<Integer, List<String>> map;
+    
+    public List<String> generateAbbreviations(String word) {
+        List<String> ret = new ArrayList<String>();
+        if (word == null) {
+            return ret;
+        }
+        int len = word.length();
+        if (len == 0) {
+            ret.add("");
+            return ret;
+        }
+        map = new HashMap<Integer, List<String>>();
+        map.put(0, new ArrayList<String>(Arrays.asList("1", word.substring(0, 1))));    
+                
+        for (int i = 1; i < len; i++) {
+            List<String> list = new ArrayList<String>();
+            for (String s: map.get(i - 1)) {
+                int num_len = 0;
+                char prev = s.charAt(s.length() - 1);
+                int d = prev - '0';
+                int order = 1;
+                int sum = 0;
+                while (d >= 0 && d < 10) {
+                    sum += d * order;
+                    order *= 10;
+                    num_len++;
+                    if (num_len == s.length()) {
+                        break;
+                    }
+                    prev = s.charAt(s.length() - num_len - 1);
+                    d = prev - '0';
+                }
+                if (sum > 0) {
+                    String ns = s.substring(0, s.length() - num_len) + String.valueOf(sum + 1);
+                    list.add(ns);
+                } else {
+                    list.add(s + "1");
+                }
+                list.add(s + word.charAt(i));
+            }
+            map.put(i, list);
+        }
+        return map.get(len - 1);
+    }
+}
