@@ -1,0 +1,56 @@
+class Solution {
+    
+    int min = Integer.MAX_VALUE;
+    
+    public int minPatches(int[] nums, int n) {
+        if (nums == null && nums.length == 0) {
+            return 0;
+        }
+        boolean[] valid = new boolean[n + 1];
+        valid[0] = true;
+        
+        // populate valid with input nums
+        populate(nums, valid, n, 0, 0);
+        
+        // check minimal numbers to path nums for all missing entries in valid
+        patch(valid, n, 0);
+        
+        return min;
+    }
+    
+    private void populate(int[] nums, boolean[] valid, int n, int start, int sum) {
+        if (sum > n) {
+            return;
+        }
+        if (start == nums.length) {
+            if (sum >= 0 && sum <= n) {
+                valid[sum] = true;
+            }
+            return;
+        }
+        populate(nums, valid, n, start + 1, sum);
+        populate(nums, valid, n, start + 1, sum + nums[start]);
+    }
+    
+    private void patch(boolean[] valid, int n, int count) { // count: current number of patches
+        int first = 0;
+        while (first <= n && valid[first]) {
+            first++;
+        }
+        if (first > n) { // all valid
+            min = Math.min(min, count);
+            return;
+        }
+        for (int i = 1; i <= first; i++) { // i: candidate patch
+            boolean[] new_valid = new boolean[n + 1];
+            System.arraycopy(valid, 0, new_valid, 0, n + 1);
+            for (int j = 1; j <= n; j++) {
+                if (!new_valid[j] && j - i >=0 && valid[j - i]) {
+                    new_valid[j] = true;
+                }
+            }
+            patch(new_valid, n, count + 1);
+        }
+    }
+    
+}
