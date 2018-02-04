@@ -1,0 +1,22 @@
+class Solution {
+    public int minPatches(int[] nums, int n) {
+        if (nums == null && nums.length == 0) {
+            return 0;
+        }
+        int count = 0;
+        int miss = 1;
+        int i = 0;
+        while (miss <= n) {
+            if (i >= nums.length || nums[i] > miss) {
+                count++;
+                if (miss > Integer.MAX_VALUE / 2) {
+                    break;
+                }
+                miss *= 2;
+            } else {
+                miss += nums[i++];
+            }
+        }
+        return count;
+    }
+}
