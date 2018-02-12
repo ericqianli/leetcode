@@ -1,0 +1,47 @@
+class Solution {
+    boolean[] visited = new boolean[9];
+    
+    public int numberOfPatterns(int m, int n) {
+        if (m < 0 || n > 9 || m > n) {
+            return 0;
+        }
+        return countPattern(0, -1, m, n);
+    }
+    
+    private int countPattern(int len, int prev, int m, int n) {
+        if (len == n) {
+            return 1;
+        }
+        int sum = 0;
+        if (len >= m && len <= n) {
+            sum++;
+        }
+        for (int i = 0; i < 9; i++) {
+            if (isValid(i, prev)) {
+                visited[i] = true;
+                sum += countPattern(len + 1, i, m, n);
+                visited[i] = false;
+            }
+        }
+        return sum;
+    }
+    
+    private boolean isValid(int index, int prev) {
+        if (prev == -1) {
+            return true;
+        }
+        if (visited[index]) {
+            return false;
+        }
+        if ((index % 3 != prev % 3) && (index / 3 != prev / 3)) {
+            if (index + prev == 8) {
+                return visited[4];
+            }
+            return true;
+        }
+        if ((index + prev) % 2 == 1) {
+            return true;
+        }
+        return visited[(index + prev) / 2];
+    }
+}
