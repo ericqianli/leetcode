@@ -1,0 +1,53 @@
+class Solution {
+    public int[] getModifiedArray(int length, int[][] updates) {
+        if (length <= 0 || updates == null) {
+            return new int[] {};
+        }
+        int[] arr = new int[length];
+        int m = updates.length;
+        if (m == 0) {
+            return arr;
+        }
+        
+        Arrays.sort(updates, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b) {
+                if (a == null || b == null || a.length < 1 || b.length < 1) {
+                    return 0;
+                }
+                return a[0] - b[0];
+            }
+        });
+        
+        Queue<int[]> ends = new PriorityQueue<int[]>(m, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
+            }
+        });
+        
+        int i = 0;
+        int cur = 0;
+        int sum = 0;
+        while (i < length) {
+            if (cur == m || i < updates[cur][0]) {
+                arr[i] = sum;
+                i++;
+            } else if (i == updates[cur][0]) {
+                sum += updates[cur][2];
+                ends.add(new int[] {updates[cur][1], updates[cur][2]});
+                cur++;
+            } else {
+                break;
+            }
+            
+            int[] end = ends.peek();
+            while (end != null && i > end[0]) {
+                sum -= end[1];
+                ends.poll();
+                end = ends.peek();
+            }
+        }
+        return arr;
+    }
+}
