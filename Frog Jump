@@ -1,0 +1,36 @@
+class Solution {
+    public boolean canCross(int[] stones) {
+        if (stones == null || stones.length < 2) {
+            return false;
+        }
+        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        for (int s: stones) {
+            Set<Integer> set = new HashSet<Integer>();
+            map.put(s, set);
+        }
+        
+        map.get(0).add(0);
+        checkStone(0, 1, map);
+        
+        int len = stones.length;
+        for (int i = 1; i < len - 1; i++) {
+            int s = stones[i];
+            Set<Integer> steps = new HashSet(map.get(s));
+            for (int step: steps) {
+                checkStone(s, step - 1, map);
+                checkStone(s, step, map);
+                checkStone(s, step + 1, map);
+            }
+        }
+        return !map.get(stones[len - 1]).isEmpty();
+    }
+    
+    private void checkStone(int i, int step, Map<Integer, Set<Integer>> map) {
+        if (step == 0) {
+            return;
+        }
+        if (map.containsKey(i + step)) {
+            map.get(i + step).add(step);
+        }
+    }
+}
