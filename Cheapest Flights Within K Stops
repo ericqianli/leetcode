@@ -1,0 +1,55 @@
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        if (n <= 0) {
+            return -1;
+        }
+        if (flights == null || flights.length == 0) {
+            return -1;
+        }
+        if (K < 0) {
+            return -1;
+        }
+        
+        int len = flights.length;
+        HashMap<Integer, List<int[]>> connect_map = new HashMap<Integer, List<int[]>>();
+        for (int i = 0; i < len; i++) {
+            int[] flight = flights[i];
+            List<int[]> connects = connect_map.get(flight[0]);
+            if (connects == null) {
+                connects = new ArrayList<int[]>();
+            }
+            connects.add(flight);
+            connect_map.put(flight[0], connects);
+        }
+        
+        
+        int cost = Integer.MAX_VALUE;
+        List<int[]> queue = new LinkedList<int[]>(); // first: index, second: cost up to index, third: current stop, fouth: prev
+        
+        queue.add(new int[] {src, 0, 0, -1});
+        
+        while (!queue.isEmpty()) {
+            int[] cur = queue.remove(0);
+            if (cur[2] > K + 1) {
+                break;
+            }
+            if (cur[0] == dst) {
+                cost = Math.min(cost, cur[1]);
+            } else {
+                List<int[]> connects = connect_map.get(cur[0]);
+                if (connects != null) {
+                    for (int[] connect: connects) {
+                        if (connect[1] != cur[3]) {
+                            queue.add(new int[] {connect[1], cur[1] + connect[2], cur[2] + 1, cur[0]});
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (cost == Integer.MAX_VALUE) {
+            return -1;
+        }
+        return cost;
+    }
+}
