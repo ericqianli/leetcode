@@ -1,0 +1,65 @@
+class Solution {
+    
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        if (n <= 0) {
+            return -1;
+        }
+        if (flights == null || flights.length == 0) {
+            return -1;
+        }
+        if (K < 0) {
+            return -1;
+        }
+        
+        int num = 0;
+        for (int[] flight: flights) {
+            num = Math.max(num, flight[0]);
+            num = Math.max(num, flight[1]);
+        };
+        int N = num + 1;
+        
+        int[] ret = new int[N];
+        for (int i = 0; i < N; i++) {
+            ret[i] = Integer.MAX_VALUE;
+        }
+        
+        int[][] step = new int[N][N];
+        
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                step[i][j] = Integer.MAX_VALUE;
+            }
+        }
+
+        for (int[] flight: flights) {
+            step[flight[0]][flight[1]] = flight[2];
+            if (flight[0] == src) {
+                ret[flight[1]] = flight[2];
+            }
+        }
+        
+        for (int i = 0; i < K; i++) {
+            ret = iterate(N, ret, step, src);
+        }
+        
+        int cost = ret[dst];
+        if (cost == Integer.MAX_VALUE) {
+            return -1;
+        }
+        return cost;
+    }
+    
+    private int[] iterate(int N, int[] ret, int[][] step, int src) {
+        int[] temp = new int[N];
+        for (int j = 0; j < N; j++) {
+            int cost = ret[j];
+            for (int k = 0; k < N; k++) {
+                if (ret[k] != Integer.MAX_VALUE && step[k][j] != Integer.MAX_VALUE) {
+                    cost = Math.min(cost, ret[k] + step[k][j]);
+                }
+            }
+            temp[j] = cost;
+        }
+        return temp;
+    }
+}
