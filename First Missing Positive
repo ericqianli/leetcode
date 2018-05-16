@@ -1,0 +1,30 @@
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 1;
+        }
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            while (nums[i] != i) {
+                if (nums[i] <= 0 || nums[i] >= len) {
+                    break;
+                }
+                if (nums[nums[i]] == nums[i]) {
+                    break;
+                }
+                int temp = nums[i];
+                nums[i] = nums[temp];
+                nums[temp] = temp;
+            }
+        }
+        if (len == 1 && nums[0] == 1) {
+            return 2;
+        }
+        for (int i = 1; i < len; i++) {
+            if (nums[i] != i) {
+                return i;
+            }
+        }
+        return len == nums[0] ? len + 1 : len;
+    }
+}
